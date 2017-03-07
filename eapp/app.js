@@ -23,6 +23,7 @@ module.exports = () => {
   app.use(express.static(path.join(__dirname, 'public/css')))
   app.use(express.static(path.join(__dirname, 'public/html')))
   app.use(express.static(path.join(__dirname, 'public/terms')))
+  app.use(express.static(path.join(__dirname, 'public/js')))
   app.use('/dist/css',express.static(path.join(__dirname,'/../node_modules/bootstrap/dist/css')))
   app.use('/dist/jquery',express.static(path.join(__dirname,'/../node_modules/jquery/dist/')))
   app.use('/dist/bootstrap',express.static(path.join(__dirname,'/../node_modules/bootstrap/dist/js')))
@@ -31,8 +32,8 @@ module.exports = () => {
   // Setup Globally Included Routes
   fs.readdirSync(path.join(__dirname, 'routes')).forEach(function(filename) {
     console.log('reading routes file')
-  	if(~filename.indexOf('.js'))
-  		require(path.join(__dirname, 'routes/'+filename))(app)
+      if(~filename.indexOf('.js'))
+        require(path.join(__dirname, 'routes/'+filename))(app)
   })
 
   app.listen(3000, function(){
