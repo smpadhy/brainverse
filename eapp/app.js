@@ -69,6 +69,11 @@ module.exports = () => {
         console.log('sub-directory:acquistion exists. No need to create it')
       }
     })
+    fs.mkdir(path.join(__dirname,'/../uploads/plansdocs'),function(err4){
+      if(err4){
+        console.log('sub-directory:acquistion exists. No need to create it')
+      }
+    })
 
   })
 
