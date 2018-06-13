@@ -277,7 +277,6 @@ app.get('/query/graphs/instrument/:projectId/:instrument_name',ensureAuthenticat
                     earr = entity[results[i].entity.value]
                     let vObj = {}
                     vObj[fieldName] = fieldValue
-                    //earr.push({fieldName : fieldValue})
                     earr.push(vObj)
                     if(! fieldsArray.includes(results[i].p.value)){
                       fieldsArray.push(results[i].p.value)
@@ -285,6 +284,22 @@ app.get('/query/graphs/instrument/:projectId/:instrument_name',ensureAuthenticat
                     entity[results[i].entity.value] = earr
                     console.log("field name: ", earr)
                   }
+                  //*** deal with participants
+                  if(results[i].p.token==='uri' && results[i].p.value === 'http://www.w3.org/ns/prov#wasAttributedTo'){
+                    let fieldName = "http://purl.org/nidash/nidm#subject"
+                    let fieldValue = results[i].v.value
+                    console.log("fieldName: ", fieldName, "  field Value: ", fieldValue)
+                    earr = entity[results[i].entity.value]
+                    let vObj = {}
+                    vObj[fieldName] = fieldValue
+
+                    //vObj["agent"] = results[i].agent.value
+                    //earr.push({fieldName : fieldValue})
+                    earr.push(vObj)
+                    entity[results[i].entity.value] = earr
+                    console.log("field name: ", earr)
+                  }
+                  //******
                 }
                 else{
                   entity[results[i].entity.value] = []
@@ -348,10 +363,11 @@ app.get('/query/graphs/instrument/:projectId/:instrument_name',ensureAuthenticat
       ?sessionactivity provone:isPartOf ?pj .\
       ?pj nidm:ID "'+ projectId +'" .\
     } }'
+
     let query1 = 'PREFIX prov:<http://www.w3.org/ns/prov#>\
     PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\
     PREFIX nidm:<http://purl.org/nidash/nidm#> \
-    SELECT ?entity ?p ?v\
+    SELECT ?entity ?p ?v \
     FROM NAMED '+ graphId + '\
     {GRAPH '+graphId+'{ ?entity rdf:type prov:Entity ;\
       prov:wasGeneratedBy ?activity; \
